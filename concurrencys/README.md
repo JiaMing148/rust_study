@@ -69,3 +69,29 @@ Rust中几乎所有的原始类型都是 `Send` ，除了原始指针。
 因为有 `Sync`&`Send` traits组成的类型也会自动成为 `Sync`&`Send`.   
 2. Rust处理并发的方式大多以creta的形式，线上的crate比标准库发展的更加先进。  
 3. Rust标准库提供了 `Mutex<T>` 和 `Arc<T>`,他们可以在并发情况下安全的使用。
+
+## mpsc模块 
+作用：允许我们在线程之间传递消息
+```rust
+use std::sync::mpsc
+use std:thread
+
+fn main(){
+  let (tx, rx) = mpsc::channel();
+  let tx2 = mpsc::Sender::clone(tx);
+
+  thread::spawn(move|| {
+     let s = String::from("AAA");
+     tx.send(s).unwrap();
+  });
+
+  thread::spawn(move|| {
+     let s = String::from("BBB");
+     tx2.send(s).unwrap();
+  });
+
+  for item in rx {
+     println!("{}", item);
+  }
+}
+```
