@@ -78,7 +78,7 @@ use std:thread
 
 fn main(){
   let (tx, rx) = mpsc::channel();
-  let tx2 = mpsc::Sender::clone(tx);
+  let tx2 = mpsc::Sender::clone(&tx);
 
   thread::spawn(move|| {
      let s = String::from("AAA");
